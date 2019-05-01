@@ -1,0 +1,48 @@
+spring:
+  security:
+    user:
+      name: admin
+      password: admin
+  boot:
+    admin:
+      ui:
+        title: Imperator Admin
+        brand: <img src="assets/img/icon-spring-boot-admin.svg"><span>Imperator Admin</span>
+      notify:
+        mail:
+          to: starrier@starrier.org
+          enabled: true
+          from: starrier@starrier.org
+      discovery:
+        enabled: true
+      routes:
+        endpoints: env,metrics,dump,jolokia,info,configprops,trace,logfile,refresh,flyway,liquibase,heapdump,loggers,auditevents,hystrix.stream
+  mail:
+    host: smtp.qq.com
+    username: 1342878298@qq.com
+    password: tgjzueoejdxbhgci
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+eureka:
+  client:
+    security:
+      basic:
+        user: admin
+        password: imperator-eureka
+    serviceUrl:
+      defaultZone: http://${eureka.client.security.basic.user}:${eureka.client.security.basic.password}@localhost:8761/eureka/
+
