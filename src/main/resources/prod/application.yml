@@ -20,7 +20,7 @@ aspring:
   mail:
     host: smtp.qq.com
     username: starrier@starrier.org
-    password: tgjzueoejdxbhgci
+    password:
     protocol: smtp
     properties:
       mail:
