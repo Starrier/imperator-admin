@@ -1,4 +1,4 @@
-package org.starrier.imperator.admin;
+package org.starrier.admin;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ImperatorAdminApplicationTests {
+public class AdminTests {
 
     @Test
     public void contextLoads() {

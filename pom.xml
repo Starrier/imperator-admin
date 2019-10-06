@@ -9,26 +9,27 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.starrier</groupId>
-    <artifactId>imperator-admin</artifactId>
+    <artifactId>admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>imperator-admin</name>
-    <description>Demo project for Spring Boot</description>
+    <name>admin</name>
+    <description>Admin for Starrier Org.</description>
 
     <properties>
         <java.version>1.8</java.version>
         <spring-boot-admin.version>2.1.4</spring-boot-admin.version>
-        <docker.image.prefix>imperator-admin</docker.image.prefix>
+        <docker.image.prefix>admin</docker.image.prefix>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -51,6 +52,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -74,6 +76,48 @@
 
    <build>
        <plugins>
+
+           <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <configuration>
+                   <skip>true</skip>
+               </configuration>
+           </plugin>
+           <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-jar-plugin</artifactId>
+               <version>3.1.1</version>
+           </plugin>
+
+           <plugin>
+               <artifactId>maven-source-plugin</artifactId>
+               <version> 3.0.1</version>
+               <executions>
+                   <execution>
+                       <id>copy-resources</id>
+                       <phase>validate</phase>
+                       <configuration>
+                           <outputDirecotry>${basedir}/target/classes/config</outputDirecotry>
+                           <resources>
+                               <resource>
+                                   <directory>${config.path}/</directory>
+                                   <filtering>true</filtering>
+                               </resource>
+                           </resources>
+                       </configuration>
+                   </execution>
+               </executions>
+           </plugin>
+           <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-compiler-plugin</artifactId>
+               <configuration>
+                   <source>1.8</source>
+                   <target>1.8</target>
+                   <skip>true</skip>
+               </configuration>
+           </plugin>
            <plugin>
                <groupId>com.spotify</groupId>
                <artifactId>docker-maven-plugin</artifactId>
@@ -90,6 +134,84 @@
                    </resources>
                </configuration>
            </plugin>
+           <plugin>
+               <groupId>org.springframework.boot</groupId>
+               <artifactId>spring-boot-maven-plugin</artifactId>
+               <!--加入下面两项配置-->
+               <executions>
+                   <execution>
+                       <goals>
+                           <goal>repackage</goal>
+                       </goals>
+                   </execution>
+               </executions>
+               <configuration>
+               <includeSystemScope>true</includeSystemScope>
+               </configuration>
+           </plugin>
        </plugins>
    </build>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env>dev</env>
+                <profiles.active>dev</profiles.active>
+                <package.target>dev</package.target>
+                <spring.profiles.active.value>dev</spring.profiles.active.value>
+                <yui.slip>true</yui.slip>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/profiles/dev</directory>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources/dev</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profiles.active>prod</profiles.active>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/profiles/prod</directory>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources/prod</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>test</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <profiles.active>test</profiles.active>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/profiles/test</directory>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources/test</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
 </project>

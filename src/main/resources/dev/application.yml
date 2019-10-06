@@ -1,0 +1,38 @@
+spring:
+  security:
+    user:
+      name: admin
+      password: admin
+  boot:
+    admin:
+      ui:
+        title: Starrier Admin
+        brand: <img src="assets/img/icon-spring-boot-admin.svg"><span>Imperator Admin</span>
+      discovery:
+        enabled: true
+      routes:
+        endpoints: env,metrics,dump,jolokia,info,configprops,trace,logfile,refresh,flyway,liquibase,heapdump,loggers,auditevents,hystrix.stream
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        service-name: admin
+        health-check-interval: 10s
+        tags: admin
+        health-check-path: /actuator/health
+        register-health-check: true
+        prefer-ip-address: true
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}
+        health-check-url: http://${spring.cloud.client.ip-address}:${server.port}/actuator/health
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+  health:
+    consul:
+      enabled: false

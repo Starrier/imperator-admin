@@ -1,4 +1,4 @@
-package org.starrier.imperator.admin.config;
+package org.starrier.admin.config;
 
 import de.codecentric.boot.admin.server.config.AdminServerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+/**
+ * 登录安全配置类
+ *
+ * @author  imperator
+ * @date 2019/09/22
+ */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 

@@ -1,4 +1,4 @@
-spring:
+aspring:
   security:
     user:
       name: admin
@@ -19,7 +19,7 @@ spring:
         endpoints: env,metrics,dump,jolokia,info,configprops,trace,logfile,refresh,flyway,liquibase,heapdump,loggers,auditevents,hystrix.stream
   mail:
     host: smtp.qq.com
-    username: 1342878298@qq.com
+    username: starrier@starrier.org
     password: tgjzueoejdxbhgci
     protocol: smtp
     properties:
@@ -29,6 +29,19 @@ spring:
           starttls:
             enable: true
             required: true
+  cloud:
+    consul:
+      host: 118.25.141.149
+      port: 8500
+      discovery:
+        service-name: imperator-admin
+        health-check-interval: 10s
+        tags: admin
+        health-check-path: /actuator/health
+        register-health-check: true
+        prefer-ip-address: true
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}
+        health-check-url: http://${spring.cloud.client.ip-address}:${server.port}/actuator/health
 management:
   endpoints:
     web:
@@ -37,12 +50,6 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
-eureka:
-  client:
-    security:
-      basic:
-        user: admin
-        password: imperator-eureka
-    serviceUrl:
-      defaultZone: http://${eureka.client.security.basic.user}:${eureka.client.security.basic.password}@localhost:8761/eureka/
-
+  health:
+    consul:
+      enabled=false:
